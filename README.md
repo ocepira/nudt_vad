@@ -39,7 +39,7 @@ docker run --rm --gpus all -v ./input:/project/input:ro -v ./output:/project/out
  OUTPUT_PATH=/project/output -e process=test  vad:latest
 
 # adv
-docker run --rm --gpus all --ipc=host  -v ./input:/project/input:ro -v ./output:/project/output:rw -e INPUT_PATH=/project/input -
+docker run --rm --gpus all   -v ./input:/project/input:ro -v ./output:/project/output:rw -e INPUT_PATH=/project/input -
 e OUTPUT_PATH=/project/output -e process=adv vad:latest
 
 # attack
