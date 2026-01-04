@@ -3,7 +3,7 @@
 本项目基于VAD库实现自动驾驶场景。支持推理、攻击、防御。
 
 ## 环境变量
-# 只需 python main.py --process xx ,不指定后面的变量名都会使用默认值
+## 只需 python main.py --process xx ,不指定后面的变量名都会使用默认值
 | 变量名 | 是否必填 | 描述 |
 |--------|---------|------|
 | input_path | 选填，默认输入路径 | 指定输入路径，在此路径下有权重文件和数据集文件 |
@@ -23,6 +23,8 @@
 | workers | 选填，默认为0 | 加载数据集时workers的数量 |
 
 ## 下载nuscene_tiny数据集和model 都放在input
+
+## 其中在model中有三个model vad_tiny对于测试, resnet50对应防御 , standard 对应攻击
 
 ## 快速开始
 python main.py  --process xx
