@@ -33,7 +33,7 @@ def sse_input_path_validated(args):
             })
             
             try:
-                if os.path.exists(f'{args.input_path}/samples'):
+                if os.path.exists(f'{args.input_path}'):
                     data_files = glob.glob(os.path.join(f'{args.input_path}/samples', '*/'))
                     sse_print("input_data_validated", {
                         "status": "success",
