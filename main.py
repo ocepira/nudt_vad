@@ -1275,7 +1275,32 @@ def main():
             }
         }
     })    
-
+        sse_print("final_result", {
+            "resp_code": 0,
+            "resp_msg": "防御任务执行完成",
+            "time_stamp": datetime.now().strftime("%Y/%m/%d-%H:%M:%S:%f")[:-3],  # 当前时间戳
+            "data": {
+                "event": "final_result",
+                "callback_params": {
+                    "task_run_id": "3f2504e0-4f89-11d3-9a0c-0305e82c3301",
+                    "method_type": "自动驾驶",
+                    "algorithm_type": "防御处理", 
+                    "task_type": "任务完成",
+                    "task_name": "自动驾驶防御任务",
+                    "parent_task_id": "f54d72a78c264f9bb93695f522881e7c",
+                    "user_name": "zhangxueyou"
+                },
+                "progress": 100,
+                "message": "防御处理任务已全部完成",
+                "log": "[100%] 防御处理任务已全部完成，系统已准备好进行下一步操作",
+                "details": {
+                    "defense_method": args.defense_method,
+                    "input_image": args.image_path,
+                    "defense_success": True,
+                    "final_status": "completed"
+                }
+            }
+        })  
 
 if __name__ == '__main__':
     args = parse_args()
