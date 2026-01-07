@@ -109,7 +109,32 @@ class ImageAttacker:
         img_pil = Image.fromarray(img_np)
         img_pil.save(save_path)
         sse_print("image_saved", {"message": f"图像已保存至: {save_path}", "path": save_path})
-    
+        sse_print("final_result", {
+            "resp_code": 0,
+            "resp_msg": "Adversarial sample generation completed",
+            "data": {
+                "event": "final_result",
+                "callback_params": {
+                    "task_run_id": "3f2504e0-4f89-11d3-9a0c-0305e82c3301",
+                    "method_type": "自动驾驶",
+                    "algorithm_type": "对抗样本生成", 
+                    "task_type": "任务完成",
+                    "task_name": "自动驾驶对抗样本生成任务",
+                    "parent_task_id": "f54d72a78c264f9bb93695f522881e7c",
+                    "user_name": "zhangxueyou"
+                },
+                "progress": 100,
+                "message": "对抗样本生成任务已全部完成",
+                "log": "[100%] 对抗样本生成任务已全部完成，对抗样本已保存",
+                "details": {
+                    "attack_method": self.attack_method,
+                    "epsilon": self.eps,
+                    "alpha": self.alpha,
+                    "steps": self.steps,
+                    "final_status": "completed"
+                }
+            }
+        })
     def save_original_size_image(self, adv_tensor, original_image_path, save_path):
         """
         保存原始尺寸的对抗样本图像
