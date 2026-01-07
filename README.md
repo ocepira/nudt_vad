@@ -18,15 +18,9 @@
 | checkpoint | 选填 | checkpoint file，当process为`test`时必填 |
 | device | 选填，默认为0 | 使用哪个gpu |
 | workers | 选填，默认为0 | 加载数据集时workers的数量 |
-
-
-###攻击参数
-
 | steps | 选填，默认为10 | 攻击迭代次数(PGD/BIM) |
 | alpha | 选填，默认为2/255 | 攻击步长(PGD/BIM) |
 | epsilon | 选填，默认为8/255 | 扰动强度 |
-
-###防御参数
 | tv-weight | 选填，默认为1.0 | 空间平滑参数 |
 | l2-weight | 选填，默认为0.01| L2保真权重 |
 | epsilon   |选填，默认 8.0  | 扰动强度限制|
