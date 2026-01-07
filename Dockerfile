@@ -104,6 +104,11 @@ RUN pip install torchattacks && \
 # 最终验证
 RUN python -c "import torch; import mmcv; import mmdet; import mmdet3d; print('=== 最终验证 ==='); print(f'PyTorch: {torch.__version__}, CUDA: {torch.version.cuda}'); print(f'mmcv: {mmcv.__version__}'); print(f'mmdet: {mmdet.__version__}'); print(f'mmdet3d: {mmdet3d.__version__}')"
 
+RUN pip uninstall setuptools -y && \
+    pip cache purge && \
+    pip install setuptools==59.5.0 --no-cache-dir 
+
+    
 # 复制项目文件
 COPY . ./
 
