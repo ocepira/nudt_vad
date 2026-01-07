@@ -203,7 +203,7 @@ def parse_args():
                         choices=['fgsm', 'pgd', 'bim','badnet', 'squareattack', 'nes'], 
                         help='对抗攻击方法')
     parser.add_argument('--epsilon', type=float, default=8/255, help='扰动强度')
-    parser.add_argument('--save-path', type=str, default=r'output/defense.png',help='对抗样本保存路径')
+    parser.add_argument('--save-path', type=str, default=r'output/result.png',help='对抗样本保存路径')
     parser.add_argument('--save-original-size', action='store_true', help='是否保存原始尺寸的对抗样本')
     parser.add_argument('--model-name', type=str, default='Standard', help='模型名称')
     parser.add_argument('--dataset', type=str, default='cifar10', help='数据集名称')
@@ -1292,7 +1292,7 @@ def main():
                 },
                 "progress": 100,
                 "message": "防御处理任务已全部完成",
-                "log": "[100%] 自动驾驶防御处理任务已全部完成，",
+                "log": "[100%] 防御处理任务已全部完成，系统已准备好进行下一步操作",
                 "details": {
                     "defense_method": args.defense_method,
                     "input_image": args.image_path,
@@ -1300,7 +1300,7 @@ def main():
                     "final_status": "completed"
                 }
             }
-        })  
+        })      
 
 if __name__ == '__main__':
     args = parse_args()
