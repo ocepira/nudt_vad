@@ -1292,7 +1292,7 @@ def main():
                 },
                 "progress": 100,
                 "message": "防御处理任务已全部完成",
-                "log": "[100%] 防御处理任务已全部完成，系统已准备好进行下一步操作",
+                "log": "[100%] 自动驾驶防御处理任务已全部完成，",
                 "details": {
                     "defense_method": args.defense_method,
                     "input_image": args.image_path,
