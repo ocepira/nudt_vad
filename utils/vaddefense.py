@@ -150,7 +150,6 @@ def save_image(tensor, save_path):
     image_pil.save(save_path)
     sse_print("image_saved", {"message": f"防御后图像已保存至: {save_path}", "path": save_path})
 
-
 def create_defense(defense_method, **kwargs):
     """根据方法名称创建防御实例"""
     if defense_method.lower() == 'fgsm_denoise':
