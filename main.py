@@ -219,7 +219,7 @@ def parse_args():
     parser.add_argument('--l2-weight', type=float, default=0.01, help='L2保真权重')
     # parser.add_argument('--steps', type=int, default=10, help='PGD迭代步数')
     # parser.add_argument('--alpha', type=float, default=1.0, help='PGD步长')
-    parser.add_argument('--number', type=int, default=1, help='number')
+    parser.add_argument('--number', default=1, help='number')
     args = parser.parse_args()  # 移动到这里，在所有add_argument之后调用
 
     # 1. 
@@ -779,6 +779,7 @@ def main():
             except Exception as e:
                 sse_print("error", {"message": f"攻击过程中发生错误: {e}"})
                 return False
+
     elif args.process == "attack":
                 # mmcv.disable_progressbar()
         
@@ -949,10 +950,10 @@ def main():
                 print(dataset.evaluate(outputs['bbox_results'], **eval_kwargs))
         
 
-        total_images = len(dataset) if hasattr(dataset, '__len__') else 1  
+        # total_images = len(dataset) if hasattr(dataset, '__len__') else 1  
         import random
         attack_success_count = 1  
-        attack_failure_count = total_images - attack_success_count  
+        # attack_failure_count = total_images - attack_success_count  
         import random
         original_performance = 0.85  #
         adversarial_performance = random.uniform(0.3, 0.6)
@@ -1001,15 +1002,15 @@ def main():
                         "epsilon": args.epsilon,
                         "alpha": args.alpha,
                         "steps": args.steps,
-                        "total_images": total_images,
+                        # "total_images": total_images,
                         "attack_success_count": attack_success_count,
-                        "attack_failure_count": attack_failure_count,
+                        # "attack_failure_count": attack_failure_count,
                         "attack_success_rate": round((attack_success_count / total_images) * 100, 2),
                         "performance_metrics": {
                             "original_performance": original_performance,
                             "adversarial_performance": adversarial_performance,
                              "successful_attacks": attack_success_count,
-                            "failed_attacks": attack_failure_count,
+                            #"failed_attacks": attack_failure_count,
                         }
                     }
                 }
