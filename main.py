@@ -220,6 +220,7 @@ def parse_args():
     # parser.add_argument('--steps', type=int, default=10, help='PGD迭代步数')
     # parser.add_argument('--alpha', type=float, default=1.0, help='PGD步长')
     parser.add_argument('--number', default=1, help='number')
+    parser.add_argument('--choose',  choices=['vad', 'uniad'])
     args = parser.parse_args()  # 移动到这里，在所有add_argument之后调用
 
     # 1. 
@@ -1367,8 +1368,7 @@ def main():
         "data": {
             "release_id": "autopilot_defense_release_202407011438",
             "release_status": {
-                "models_released": ["uniad-autonomous-driving-robust-v1"],
-                "datasets_released": ["cityscapes-autonomous-driving-v1"],
+                "models_released": ["vad-autonomous-driving-robust-v1"],
                 "adversarial_samples_released": ["fgsm_at_samples_20240701"],
                 "memory_freed": "4.3GB",
                 "gpu_memory_cleared": True,
