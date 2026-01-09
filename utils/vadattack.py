@@ -250,13 +250,14 @@ class ImageAttacker:
         # 保存对抗样本
         if save_path:
             os.makedirs(os.path.dirname(save_path), exist_ok=True)
-            img.save(img_path)
+            # img.save(img_path)
             # 如果需要保存原始尺寸的图像
             if save_original_size:
                 original_size_save_path = save_path.replace(".png", "_original_size.png")
                 self.save_original_size_image(adv_images, img_path, original_size_save_path)
                 self.save_image(img, save_path)
         total_images = 1
+        img.save(save_path)
         event = "final_result"
         data = {
                 "resp_code": 0,
