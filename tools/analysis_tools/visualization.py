@@ -422,7 +422,7 @@ def get_gt_fut_trajs(nusc: NuScenes,
 
 def get_gt_vec_maps(
     sample_token,
-    data_root='data/nuscenes/',
+    data_root=r'input/data/nuscenes',
     pc_range=[-15.0, -30.0, -4.0, 15.0, 30.0, 4.0],
     padding_value=-10000,
     map_classes=['divider', 'ped_crossing', 'boundary'],
@@ -493,7 +493,7 @@ def visualize_sample(nusc: NuScenes,
                      verbose: bool = True,
                      savepath: str = None,
                      traj_use_perstep_offset: bool = True,
-                     data_root='data/nuscenes/',
+                     data_root=r"input/data/nuscenes",
                      map_pc_range: list = [-15.0, -30.0, -4.0, 15.0, 30.0, 4.0],
                      padding_value=-10000,
                      map_classes=['divider', 'ped_crossing', 'boundary'],
@@ -736,7 +736,7 @@ if __name__ == '__main__':
     bevformer_results = mmcv.load(inference_result_path)
     sample_token_list = list(bevformer_results['results'].keys())
 
-    nusc = NuScenes(version='v1.0-mini', dataroot=r'/data6/user24215461/autodrive/VAD/data/nuscenes', verbose=True) #
+    nusc = NuScenes(version='v1.0-mini', dataroot=r'input/data/nuscenes', verbose=True) #
     
     imgs = []
     fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
