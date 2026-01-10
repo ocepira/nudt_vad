@@ -1017,7 +1017,7 @@ def main():
                     }
                 }
             }            
-           
+        print("\n")    
         sse_print(event, data)
    
     elif args.process == "defense":
