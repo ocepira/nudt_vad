@@ -970,6 +970,7 @@ def main():
                 "--save-path", vis_path
             ]
         result = subprocess.run(vis_cmd, check=True, capture_output=True, text=True)
+        print("\n")    
         sse_print("visualization_complete", {
                 "status": "success",
                 "message": "可视化处理完成",
@@ -1011,13 +1012,12 @@ def main():
                         "performance_metrics": {
                             "original_performance": original_performance,
                             "adversarial_performance": adversarial_performance,
-                             "successful_attacks": attack_success_count,
-                            #"failed_attacks": attack_failure_count,
+                            "successful_attacks": attack_success_count,
+                            "failed_attacks": total_images - attack_success_count,
                         }
                     }
                 }
             }            
-        print("\n")    
         sse_print(event, data)
    
     elif args.process == "defense":
