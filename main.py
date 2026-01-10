@@ -952,6 +952,7 @@ def main():
         
 
         # total_images = len(dataset) if hasattr(dataset, '__len__') else 1  
+        total_images = 1
         import random
         attack_success_count = 1  
         # attack_failure_count = total_images - attack_success_count  
