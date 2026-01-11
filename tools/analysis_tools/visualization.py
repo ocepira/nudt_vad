@@ -993,7 +993,7 @@ if __name__ == '__main__':
         cam_img = cv2.resize(cam_img, size)
         vis_img = cv2.hconcat([cam_img, sample_img])
 
-        # video.write(vis_img)
-    
+        ## video.write(vis_img)
+   
     video.release()
     cv2.destroyAllWindows()
