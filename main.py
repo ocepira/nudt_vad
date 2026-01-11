@@ -614,7 +614,7 @@ def main():
                 else:
                     mmcv.dump(outputs['bbox_results'], args.out)
             kwargs = {} if args.eval_options is None else args.eval_options
-            kwargs['jsonfile_prefix'] = osp.join('test', args.config.split(
+            kwargs['jsonfile_prefix'] = osp.join('output', args.config.split(
                 '/')[-1].split('.')[-2], time.ctime().replace(' ', '_').replace(':', '_'))
             
             if args.format_only:
@@ -933,7 +933,7 @@ def main():
                 else:
                     mmcv.dump(outputs['bbox_results'], args.out)
             kwargs = {} if args.eval_options is None else args.eval_options
-            kwargs['jsonfile_prefix'] = osp.join('test', args.config.split(
+            kwargs['jsonfile_prefix'] = osp.join('output', args.config.split(
                 '/')[-1].split('.')[-2], time.ctime().replace(' ', '_').replace(':', '_'))
             if args.format_only:
                 dataset.format_results(outputs['bbox_results'], **kwargs)
@@ -961,6 +961,7 @@ def main():
         import subprocess
         import sys
         vis_path = args.output_path
+        print("\n")
         os.makedirs(vis_path, exist_ok=True)
         vis_cmd = [
                 sys.executable,
@@ -969,7 +970,7 @@ def main():
                 "--save-path", vis_path
             ]
         result = subprocess.run(vis_cmd, check=True, capture_output=True, text=True)
-        print("\n")
+  
         sse_print("visualization_complete", {
                 "status": "success",
                 "message": "可视化处理完成",
