@@ -1003,8 +1003,8 @@ def main():
                     "log": f"[100%] VAD模型在nuScenes数据集上对抗攻击测试完成,处理{total_images}张图片",
                     "details": {
                         "adversarial_is_saved": "output",
-                        "original_is_saved": "output/CAM_FRONT_PRED_CORRECT.png",
-                        "attack_is_saved": "output/CAM_FRONT_PRED_ERROR.png",
+                        "original_is_saved": "output/CAM_FRONT_PRED.png",
+                        "attack_is_saved": "output/CAM_FRONT_PRED_ATTACK.png",
                         "attack_method": args.attack_method,
                         "epsilon": args.epsilon,
                         "alpha": args.alpha,
