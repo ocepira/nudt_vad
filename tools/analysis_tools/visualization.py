@@ -794,9 +794,14 @@ if __name__ == '__main__':
                     # we set z=-1 to get points near the ground in lidar coord system
                     plan_cmd = np.argmax(bevformer_results['plan_results'][sample_token][1][0,0,0])
                     plan_traj = bevformer_results['plan_results'][sample_token][0][plan_cmd]
+                    # cmd_list = ['Turn Right', 'Turn Left', 'Go Straight'] # 对应索引 0:右转 1:左转 2:直行
+                    # plan_cmd = 0  # 强制画左转轨迹，改成0=右转，改成2=直行
+                    # plan_traj = bevformer_results['plan_results'][sample_token][0][plan_cmd]
+
                     plan_traj[abs(plan_traj) < 0.01] = 0.0
                     plan_traj = plan_traj.cumsum(axis=0)
-
+                    # plan_traj[:, 0] += 2.0  
+                    
                     plan_traj = np.concatenate((
                         plan_traj[:, [0]],
                         plan_traj[:, [1]],
@@ -850,12 +855,95 @@ if __name__ == '__main__':
                     line_segments = LineCollection(plan_vecs, colors=colors, linewidths=2, linestyles='solid', cmap=cmap)
                     ax.add_collection(line_segments)
 
+                    ###
+                    savepath_correct = osp.join(out_path, f'{cam}_PRED_CORRECT')
+                    plt.savefig(savepath_correct,bbox_inches='tight', dpi=200, pad_inches=0.0)
+                    # 关键：删除正确轨迹的绘制，画布清空轨迹层，准备绘制错误轨迹，图片无叠加
+                    ax.collections.clear()
+
+                    # ===================== 第二步：生成你原来的【错误偏离轨迹】 所有修改完全保留！ =====================
+                    lidar_sd_record =  nusc.get('sample_data', sample['data']['LIDAR_TOP'])
+                    lidar_cs_record = nusc.get('calibrated_sensor', lidar_sd_record['calibrated_sensor_token'])
+                    lidar_pose_record = nusc.get('ego_pose', lidar_sd_record['ego_pose_token'])
+
+                    # get plan traj [x,y,z,w] quaternion, w=1
+                    # we set z=-1 to get points near the ground in lidar coord system
+                    # plan_cmd = np.argmax(bevformer_results['plan_results'][sample_token][1][0,0,0])
+                    # plan_traj = bevformer_results['plan_results'][sample_token][0][plan_cmd]
+                    # cmd_list = ['Turn Right', 'Turn Left', 'Go Straight'] 
+                    # plan_cmd = 0  
+                    plan_traj = bevformer_results['plan_results'][sample_token][0][plan_cmd]
+
+                    plan_traj[abs(plan_traj) < 0.01] = 0.0
+                    plan_traj = plan_traj.cumsum(axis=0)
+                    plan_traj[:, 0] += 2.0  
+                    
+                    plan_traj = np.concatenate((
+                        plan_traj[:, [0]],
+                        plan_traj[:, [1]],
+                        -1.0*np.ones((plan_traj.shape[0], 1)),
+                        np.ones((plan_traj.shape[0], 1)),
+                    ), axis=1)
+                    # add the start point in lcf
+                    plan_traj = np.concatenate((np.zeros((1, plan_traj.shape[1])), plan_traj), axis=0)
+                    # plan_traj[0, :2] = 2*plan_traj[1, :2] - plan_traj[2, :2]
+                    plan_traj[0, 0] = 0.3
+                    plan_traj[0, 2] = -1.0
+                    plan_traj[0, 3] = 1.0
+
+                    l2e_r = lidar_cs_record['rotation']
+                    l2e_t = lidar_cs_record['translation']
+                    e2g_r = lidar_pose_record['rotation']
+                    e2g_t = lidar_pose_record['translation']
+                    l2e_r_mat = Quaternion(l2e_r).rotation_matrix
+                    e2g_r_mat = Quaternion(e2g_r).rotation_matrix
+                    s2l_r, s2l_t = obtain_sensor2top(nusc, sample_data_token, l2e_t, l2e_r_mat, e2g_t, e2g_r_mat, cam)
+                    # obtain lidar to image transformation matrix
+                    lidar2cam_r = np.linalg.inv(s2l_r)
+                    lidar2cam_t = s2l_t @ lidar2cam_r.T
+                    lidar2cam_rt = np.eye(4)
+                    lidar2cam_rt[:3, :3] = lidar2cam_r.T
+                    lidar2cam_rt[3, :3] = -lidar2cam_t
+                    viewpad = np.eye(4)
+                    viewpad[:camera_intrinsic.shape[0], :camera_intrinsic.shape[1]] = camera_intrinsic
+                    lidar2img_rt = (viewpad @ lidar2cam_rt.T)
+                    plan_traj = lidar2img_rt @ plan_traj.T
+                    plan_traj = plan_traj[0:2, ...] / np.maximum(
+                        plan_traj[2:3, ...], np.ones_like(plan_traj[2:3, ...]) * 1e-5)
+                    plan_traj = plan_traj.T
+                    plan_traj = np.stack((plan_traj[:-1], plan_traj[1:]), axis=1)
+
+                    plan_vecs = None
+                    for i in range(plan_traj.shape[0]):
+                        plan_vec_i = plan_traj[i]
+                        x_linspace = np.linspace(plan_vec_i[0, 0], plan_vec_i[1, 0], 51)
+                        y_linspace = np.linspace(plan_vec_i[0, 1], plan_vec_i[1, 1], 51)
+                        xy = np.stack((x_linspace, y_linspace), axis=1)
+                        xy = np.stack((xy[:-1], xy[1:]), axis=1)
+                        if plan_vecs is None:
+                            plan_vecs = xy
+                        else:
+                            plan_vecs = np.concatenate((plan_vecs, xy), axis=0)
+
+                    cmap = 'winter'
+                    y = np.sin(np.linspace(1/2*np.pi, 3/2*np.pi, 301))
+                    colors = color_map(y[:-1], cmap)
+                    line_segments = LineCollection(plan_vecs, colors=colors, linewidths=2, linestyles='solid', cmap=cmap)
+                    ax.add_collection(line_segments)
+
+                    # ✅ 保存【错误偏离轨迹】的CAM_FRONT图 文件名：CAM_FRONT_PRED_ERROR.png
+                    savepath_error = osp.join(out_path, f'{cam}_PRED_ERROR')
+                    plt.savefig(savepath_error, bbox_inches='tight', dpi=200, pad_inches=0.0)                    
+                
+
                 ax.set_xlim(0, data.size[0])
                 ax.set_ylim(data.size[1], 0)
                 ax.axis('off')
                 if out_path is not None:
-                    savepath = osp.join(out_path, f'{cam}_PRED')
-                    plt.savefig(savepath, bbox_inches='tight', dpi=200, pad_inches=0.0)
+                    # CAM_FRONT已经单独保存了正确/错误图，这里跳过；其他摄像头正常保存
+                    if cam != 'CAM_FRONT':
+                        savepath = osp.join(out_path, f'{cam}_PRED')
+                        plt.savefig(savepath, bbox_inches='tight', dpi=200, pad_inches=0.0)
                 plt.close()
 
                 # Load boxes and image.
@@ -905,7 +993,7 @@ if __name__ == '__main__':
         cam_img = cv2.resize(cam_img, size)
         vis_img = cv2.hconcat([cam_img, sample_img])
 
-        video.write(vis_img)
+        # video.write(vis_img)
     
     video.release()
     cv2.destroyAllWindows()
