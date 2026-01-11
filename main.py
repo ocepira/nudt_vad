@@ -969,7 +969,7 @@ def main():
                 "--save-path", vis_path
             ]
         result = subprocess.run(vis_cmd, check=True, capture_output=True, text=True)
-        print("\n")    
+        print("\n")
         sse_print("visualization_complete", {
                 "status": "success",
                 "message": "可视化处理完成",
@@ -1425,7 +1425,11 @@ def main():
                         "defense_success": True,
                         "final_status": "completed",
                         "saving_image": {"message": f"防御后图像到: {args.save_path}"},
-                        "saving_model": {"message": "模型已保存至 ./output/vad_defense 目录"}
+                        "saving_model": {"message": "模型已保存至 ./output/vad_defense 目录"},
+                        "summary":{
+                            "task_succest_count":1,
+                            "task_failure_count":0
+                        }
 
                     }
                 }
