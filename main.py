@@ -1011,8 +1011,8 @@ def main():
                         "steps": args.steps,
                         
                         "summary":{ 
-                            "task success count": attack_success_count ,
-                            "task failure_count": total_images - attack_success_count,
+                            "task_success_count": attack_success_count ,
+                            "task_failure_count": total_images - attack_success_count,
                         },
                         # "total_images": total_images,
                         # "attack_failure_count": attack_failure_count,
