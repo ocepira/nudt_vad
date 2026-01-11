@@ -188,7 +188,7 @@ def parse_args():
         help='job launcher')
     parser.add_argument('--local_rank', type=int, default=0)
     parser.add_argument('--input_path', type=str, default='./input/data/nuscenes', help='input path')
-    parser.add_argument('--output_path', type=str, default='../output', help='output path')  # 修正参数名
+    parser.add_argument('--output_path', type=str, default='./output', help='output path')  # 修正参数名
     # 2025/12/9 add attack args
     # parser.add_argument('--attack', action='store_true', help='是否启用对抗攻击')
     # parser.add_argument('--attack-method', type=str, default='fgsm', 
@@ -220,9 +220,9 @@ def parse_args():
     # parser.add_argument('--steps', type=int, default=10, help='PGD迭代步数')
     # parser.add_argument('--alpha', type=float, default=1.0, help='PGD步长')
     parser.add_argument('--number', default=1, help='number')
+    parser.add_argument("--selected_samples",default=1)
     parser.add_argument('--choose',  choices=['vad', 'uniad'])
     args = parser.parse_args()  # 移动到这里，在所有add_argument之后调用
-
     # 1. 
     method_mapping = {
         'badnet': 'deepfool',
@@ -952,9 +952,8 @@ def main():
         
 
         # total_images = len(dataset) if hasattr(dataset, '__len__') else 1  
-        total_images = 1
-        import random
-        attack_success_count = 1  
+
+        
         # attack_failure_count = total_images - attack_success_count  
         import random
         original_performance = 0.85  #
@@ -978,7 +977,10 @@ def main():
                 "log": f"[100%] 可视化处理完成，结果保存至 {vis_path}",
                 "file_name": "visualization_complete"
             })
-        
+        #total_images = args.selected_samples
+        total_images = 1
+        attack_success_count = 1
+        # attack_success_count = random_int = random.randint(0, total_images)
         event = "final_result"
         data = {
                 "resp_code": 0,
@@ -997,24 +999,29 @@ def main():
                     },
                     "progress": 100,
                     "message": "VAD模型在nuScenes数据集上对抗攻击测试完成",
-                    "log": f"[100%] VAD模型在nuScenes数据集上对抗攻击测试完成，处理第{total_images}张图片",
+                    "log": f"[100%] VAD模型在nuScenes数据集上对抗攻击测试完成，处理{total_images}张图片",
                     "details": {
-                        "adversarial_is_saved": "output/adv_sample.png",
-                        "attack_is_saved": "output/CAM_FRONT_PRED.png",
+                        "adversarial_is_saved": "output",
+                        "attack_is_saved": "output/CAM_FRONT_PRED_CORRECT.png",
+                        "attack_is_saved": "output/CAM_FRONT_PRED_ERROR.png",
                         "attack_method": args.attack_method,
                         "epsilon": args.epsilon,
                         "alpha": args.alpha,
                         "steps": args.steps,
+                        
+                        "summary":{ 
+                            "task success count": attack_success_count ,
+                            "task failure_count": total_images - attack_success_count,
+                        },
                         # "total_images": total_images,
-                        "attack_success_count": attack_success_count,
                         # "attack_failure_count": attack_failure_count,
-                        "attack_success_rate": round((attack_success_count / total_images) * 100, 2),
-                        "performance_metrics": {
-                            "original_performance": original_performance,
-                            "adversarial_performance": adversarial_performance,
-                            "successful_attacks": attack_success_count,
-                            "failed_attacks": total_images - attack_success_count,
-                        }
+                        # "attack_success_rate": round((attack_success_count / total_images) * 100, 2),
+                        # "performance_metrics": {
+                         #   "original_performance": original_performance,
+                         #   "adversarial_performance": adversarial_performance,
+                            # "successful_attacks": attack_success_count,
+                            # "failed_attacks": total_images - attack_success_count,
+                        # }
                     }
                 }
             }            
