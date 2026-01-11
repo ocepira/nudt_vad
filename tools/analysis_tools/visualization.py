@@ -784,7 +784,13 @@ if __name__ == '__main__':
                 # Show image.
                 _, ax = plt.subplots(1, 1, figsize=(6, 12))
                 ax.imshow(data)
-
+                ax.set_xticks([])  # 关闭x轴刻度（数值+刻度线）
+                ax.set_yticks([])  # 关闭y轴刻度（数值+刻度线）
+                # 关闭所有边框（top/bottom/left/right）
+                for spine in ax.spines.values():
+                    spine.set_visible(False)
+                ax.grid(False)     # 确保网格线关闭（默认也关，显式确认）
+                ax.axis('off')
                 if cam == 'CAM_FRONT':
                     lidar_sd_record =  nusc.get('sample_data', sample['data']['LIDAR_TOP'])
                     lidar_cs_record = nusc.get('calibrated_sensor', lidar_sd_record['calibrated_sensor_token'])
@@ -856,7 +862,7 @@ if __name__ == '__main__':
                     ax.add_collection(line_segments)
 
                     ###
-                    savepath_correct = osp.join(out_path, f'{cam}_PRED_CORRECT')
+                    savepath_correct = osp.join(out_path, f'{cam}_PRED')
                     plt.savefig(savepath_correct,bbox_inches='tight', dpi=200, pad_inches=0.0)
                     # 关键：删除正确轨迹的绘制，画布清空轨迹层，准备绘制错误轨迹，图片无叠加
                     ax.collections.clear()
@@ -932,7 +938,7 @@ if __name__ == '__main__':
                     ax.add_collection(line_segments)
 
                     # ✅ 保存【错误偏离轨迹】的CAM_FRONT图 文件名：CAM_FRONT_PRED_ERROR.png
-                    savepath_error = osp.join(out_path, f'{cam}_PRED_ERROR')
+                    savepath_error = osp.join(out_path, f'{cam}_PRED_ATTACK')
                     plt.savefig(savepath_error, bbox_inches='tight', dpi=200, pad_inches=0.0)                    
                 
 
@@ -993,7 +999,7 @@ if __name__ == '__main__':
         cam_img = cv2.resize(cam_img, size)
         vis_img = cv2.hconcat([cam_img, sample_img])
 
-        ## video.write(vis_img)
-   
+        # video.write(vis_img)
+    
     video.release()
     cv2.destroyAllWindows()
