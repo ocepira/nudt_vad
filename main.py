@@ -1003,16 +1003,16 @@ def main():
                     "log": f"[100%] VAD模型在nuScenes数据集上对抗攻击测试完成,处理{total_images}张图片",
                     "details": {
                         "adversarial_is_saved": "output",
-                        "original_is_saved": "output/CAM_FRONT_PRED.png",
-                        "attack_is_saved": "output/CAM_FRONT_PRED_ATTACK.png",
+                        "original_is_saved": "output/CAM_FRONT_PRED_id.png",
+                        "attack_is_saved": "output/CAM_FRONT_PRED_ATTACK_id.png",
                         "attack_method": args.attack_method,
                         "epsilon": args.epsilon,
                         "alpha": args.alpha,
                         "steps": args.steps,
                         
                         "summary":{ 
-                            "task_success_count": attack_success_count ,
-                            "task_failure_count": total_images - attack_success_count,
+                            "task success count": attack_success_count ,
+                            "task failure_count": total_images - attack_success_count,
                         },
                         # "total_images": total_images,
                         # "attack_failure_count": attack_failure_count,
@@ -1578,7 +1578,8 @@ def main():
                 "tools/analysis_tools/visualize.py",
                 "--result-path", kwargs['jsonfile_prefix'] + '/pts_bbox/results_nusc.pkl',
                 "--save-path", vis_path
-            ]        
+            ]
+        result = subprocess.run(vis_cmd, check=True, capture_output=True, text=True)            
         sse_print("final_result", {
                 "resp_code": 0,
                 "resp_msg": "防御任务执行完成",
@@ -1603,7 +1604,7 @@ def main():
                         "final_status": "completed",
                         "saving_image": {"message": f"防御后图像到: {args.save_path}"},
                         "saving_model": {"message": "模型已保存至 ./output/vad_defense 目录"},
-                        "saving_infer": {"message": f"防御后推理结果保存为: CAM_FRONT_PRED.png"},
+                        "saving_infer": {"message": f"防御后推理结果保存为: CAM_FRONT_PRED_id.png"},
                         "summary":{
                             "task_succest_count":1,
                             "task_failure_count":0
