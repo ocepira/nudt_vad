@@ -749,6 +749,7 @@ if __name__ == '__main__':
                            out_path=out_path)
         pred_path = osp.join(out_path, 'bev_pred.png')
         pred_img = cv2.imread(pred_path)
+        
         os.remove(pred_path)
 
         sample_token = sample_token_list[id]
@@ -864,10 +865,10 @@ if __name__ == '__main__':
                     ###
                     savepath_correct = osp.join(out_path, f'{cam}_PRED')
                     plt.savefig(savepath_correct,bbox_inches='tight', dpi=200, pad_inches=0.0)
-                    # 关键：删除正确轨迹的绘制，画布清空轨迹层，准备绘制错误轨迹，图片无叠加
+                    savepath_correct = osp.join(out_path, f'{cam}_PRED_{id}')
+                    plt.savefig(savepath_correct,bbox_inches='tight', dpi=200, pad_inches=0.0)
                     ax.collections.clear()
 
-                    # ===================== 第二步：生成你原来的【错误偏离轨迹】 所有修改完全保留！ =====================
                     lidar_sd_record =  nusc.get('sample_data', sample['data']['LIDAR_TOP'])
                     lidar_cs_record = nusc.get('calibrated_sensor', lidar_sd_record['calibrated_sensor_token'])
                     lidar_pose_record = nusc.get('ego_pose', lidar_sd_record['ego_pose_token'])
@@ -940,8 +941,11 @@ if __name__ == '__main__':
                     # ✅ 保存【错误偏离轨迹】的CAM_FRONT图 文件名：CAM_FRONT_PRED_ERROR.png
                     savepath_error = osp.join(out_path, f'{cam}_PRED_ATTACK')
                     plt.savefig(savepath_error, bbox_inches='tight', dpi=200, pad_inches=0.0)                    
-                
-
+                    savepath_correct = osp.join(out_path, f'{cam}_PRED_ATTACK_{id}')
+                    plt.savefig(savepath_correct,bbox_inches='tight', dpi=200, pad_inches=0.0)
+                    if id == 4 :
+                        import sys
+                        sys.exit(0)
                 ax.set_xlim(0, data.size[0])
                 ax.set_ylim(data.size[1], 0)
                 ax.axis('off')
