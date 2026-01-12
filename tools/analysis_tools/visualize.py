@@ -855,13 +855,20 @@ if __name__ == '__main__':
                     colors = color_map(y[:-1], cmap)
                     line_segments = LineCollection(plan_vecs, colors=colors, linewidths=2, linestyles='solid', cmap=cmap)
                     ax.add_collection(line_segments)
-
+                    savepath_correct = osp.join(out_path, f'{cam}_PRED')
+                    plt.savefig(savepath_correct,bbox_inches='tight', dpi=200, pad_inches=0.0)
+                    savepath_correct = osp.join(out_path, f'{cam}_PRED_{id}')
+                    plt.savefig(savepath_correct,bbox_inches='tight', dpi=200, pad_inches=0.0)
+                    if id == 4 :
+                        import sys
+                        sys.exit(0)
                 ax.set_xlim(0, data.size[0])
                 ax.set_ylim(data.size[1], 0)
                 ax.axis('off')
                 if out_path is not None:
-                    savepath = osp.join(out_path, f'{cam}_PRED')
-                    plt.savefig(savepath, bbox_inches='tight', dpi=200, pad_inches=0.0)
+                    if cam != 'CAM_FRONT':
+                        savepath = osp.join(out_path, f'{cam}_PRED')
+                        plt.savefig(savepath, bbox_inches='tight', dpi=200, pad_inches=0.0)
                 plt.close()
 
                 # Load boxes and image.
