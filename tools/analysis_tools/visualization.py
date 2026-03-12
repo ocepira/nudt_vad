@@ -733,6 +733,8 @@ if __name__ == '__main__':
     args = parse_args()
     inference_result_path = args.result_path
     out_path = args.save_path
+    ori_output_path = osp.join(out_path, 'ori_images')
+    atk_output_path = osp.join(out_path, 'atk_images')
     bevformer_results = mmcv.load(inference_result_path)
     sample_token_list = list(bevformer_results['results'].keys())
 
@@ -744,6 +746,8 @@ if __name__ == '__main__':
     video = cv2.VideoWriter(video_path, fourcc, 10, (2933, 800), True)
     for id in tqdm(range(len(sample_token_list))):
         mmcv.mkdir_or_exist(out_path)
+        mmcv.mkdir_or_exist(ori_output_path)
+        mmcv.mkdir_or_exist(atk_output_path)
         render_sample_data(sample_token_list[id],
                            pred_data=bevformer_results,
                            out_path=out_path)
@@ -865,8 +869,12 @@ if __name__ == '__main__':
                     ###
                     savepath_correct = osp.join(out_path, f'{cam}_PRED')
                     plt.savefig(savepath_correct,bbox_inches='tight', dpi=200, pad_inches=0.0)
-                    savepath_correct = osp.join(out_path, f'{cam}_PRED_{id}')
-                    plt.savefig(savepath_correct,bbox_inches='tight', dpi=200, pad_inches=0.0)
+                    # savepath_correct = osp.join(out_path, f'{cam}_PRED_{id}')
+                    # plt.savefig(savepath_correct,bbox_inches='tight', dpi=200, pad_inches=0.0)
+                    # ori_savepath = osp.join(ori_output_path, f'{cam}_PRED')
+                    # plt.savefig(ori_savepath, bbox_inches='tight', dpi=200, pad_inches=0.0)
+                    ori_savepath = osp.join(ori_output_path, f'{cam}_PRED_{id}')
+                    plt.savefig(ori_savepath, bbox_inches='tight', dpi=200, pad_inches=0.0)
                     ax.collections.clear()
 
                     lidar_sd_record =  nusc.get('sample_data', sample['data']['LIDAR_TOP'])
@@ -939,10 +947,14 @@ if __name__ == '__main__':
                     ax.add_collection(line_segments)
 
                     # ✅ 保存【错误偏离轨迹】的CAM_FRONT图 文件名：CAM_FRONT_PRED_ERROR.png
-                    savepath_error = osp.join(out_path, f'{cam}_PRED_ATTACK')
-                    plt.savefig(savepath_error, bbox_inches='tight', dpi=200, pad_inches=0.0)                    
-                    savepath_correct = osp.join(out_path, f'{cam}_PRED_ATTACK_{id}')
-                    plt.savefig(savepath_correct,bbox_inches='tight', dpi=200, pad_inches=0.0)
+                    # savepath_error = osp.join(out_path, f'{cam}_PRED_ATTACK')
+                    # plt.savefig(savepath_error, bbox_inches='tight', dpi=200, pad_inches=0.0)
+                    ori_attack_savepath = osp.join(ori_output_path, f'{cam}_PRED_ATTACK')
+                    plt.savefig(ori_attack_savepath, bbox_inches='tight', dpi=200, pad_inches=0.0)
+                    # savepath_correct = osp.join(out_path, f'{cam}_PRED_ATTACK_{id}')
+                    # plt.savefig(savepath_correct,bbox_inches='tight', dpi=200, pad_inches=0.0)
+                    atk_savepath = osp.join(atk_output_path, f'{cam}_PRED_ATTACK_{id}')
+                    plt.savefig(atk_savepath, bbox_inches='tight', dpi=200, pad_inches=0.0)
                     if id == 4 :
                         import sys
                         sys.exit(0)
