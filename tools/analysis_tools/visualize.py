@@ -733,6 +733,8 @@ if __name__ == '__main__':
     args = parse_args()
     inference_result_path = args.result_path
     out_path = args.save_path
+    ori_output_path = osp.join(out_path, 'ori_images')
+    def_output_path = osp.join(out_path, 'def_images')
     bevformer_results = mmcv.load(inference_result_path)
     sample_token_list = list(bevformer_results['results'].keys())
 
@@ -744,6 +746,8 @@ if __name__ == '__main__':
     video = cv2.VideoWriter(video_path, fourcc, 10, (2933, 800), True)
     for id in tqdm(range(len(sample_token_list))):
         mmcv.mkdir_or_exist(out_path)
+        mmcv.mkdir_or_exist(ori_output_path)
+        mmcv.mkdir_or_exist(def_output_path)
         render_sample_data(sample_token_list[id],
                            pred_data=bevformer_results,
                            out_path=out_path)
@@ -859,7 +863,11 @@ if __name__ == '__main__':
                     plt.savefig(savepath_correct,bbox_inches='tight', dpi=200, pad_inches=0.0)
                     savepath_correct = osp.join(out_path, f'{cam}_PRED_{id}')
                     plt.savefig(savepath_correct,bbox_inches='tight', dpi=200, pad_inches=0.0)
-                    savepath_correct = osp.join(out_path, f'{cam}_PRED_DEFENSE_{id}')
+                    savepath_correct = osp.join(ori_output_path, f'{cam}_PRED_{id}')
+                    plt.savefig(savepath_correct,bbox_inches='tight', dpi=200, pad_inches=0.0)
+                    # savepath_correct = osp.join(out_path, f'{cam}_PRED_Defense_{id}')
+                    # plt.savefig(savepath_correct,bbox_inches='tight', dpi=200, pad_inches=0.0)
+                    savepath_correct = osp.join(def_output_path, f'{cam}_PRED_Defense_{id}')
                     plt.savefig(savepath_correct,bbox_inches='tight', dpi=200, pad_inches=0.0)
                     if id == 4 :
                         import sys
