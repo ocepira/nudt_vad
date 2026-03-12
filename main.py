@@ -1003,8 +1003,8 @@ def main():
                     "log": f"[100%] VAD模型在nuScenes数据集上对抗攻击测试完成,处理{total_images}张图片",
                     "details": {
                         "adversarial_is_saved": "output",
-                        "original_is_saved": "output/CAM_FRONT_PRED_id.png",
-                        "attack_is_saved": "output/CAM_FRONT_PRED_ATTACK_id.png",
+                        "ori_image": "output/CAM_FRONT_PRED_id.png",
+                        "attack_image": "output/CAM_FRONT_PRED_ATTACK_id.png",
                         "attack_method": args.attack_method,
                         "epsilon": args.epsilon,
                         "alpha": args.alpha,
@@ -1604,7 +1604,8 @@ def main():
                         "final_status": "completed",
                         "saving_image": {"message": f"防御后图像到: {args.save_path}"},
                         "saving_model": {"message": "模型已保存至 ./output/vad_defense 目录"},
-                        "saving_infer": {"message": f"防御后推理结果保存为: CAM_FRONT_PRED_id.png"},
+                        "ori_images": {"message": f"防御后推理结果保存为: CAM_FRONT_PRED_id.png"},
+                        "defense_images": {"message": f"防御后推理结果保存为: CAM_FRONT_PRED_Defenseid.png"},
                         "summary":{
                             "task_succest_count":1,
                             "task_failure_count":0
