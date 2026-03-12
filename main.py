@@ -1605,7 +1605,7 @@ def main():
                         "saving_image": {"message": f"防御后图像到: {args.save_path}"},
                         "saving_model": {"message": "模型已保存至 ./output/vad_defense 目录"},
                         "ori_images": {"message": f"防御后推理结果保存为: CAM_FRONT_PRED_id.png"},
-                        "defense_images": {"message": f"防御后推理结果保存为: CAM_FRONT_PRED_Defenseid.png"},
+                        "defense_images": {"message": f"防御后推理结果保存为: CAM_FRONT_PRED_DEFENSE_id.png"},
                         "summary":{
                             "task_succest_count":1,
                             "task_failure_count":0
