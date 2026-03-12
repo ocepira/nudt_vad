@@ -859,6 +859,8 @@ if __name__ == '__main__':
                     plt.savefig(savepath_correct,bbox_inches='tight', dpi=200, pad_inches=0.0)
                     savepath_correct = osp.join(out_path, f'{cam}_PRED_{id}')
                     plt.savefig(savepath_correct,bbox_inches='tight', dpi=200, pad_inches=0.0)
+                    savepath_correct = osp.join(out_path, f'{cam}_PRED_Defense_{id}')
+                    plt.savefig(savepath_correct,bbox_inches='tight', dpi=200, pad_inches=0.0)
                     if id == 4 :
                         import sys
                         sys.exit(0)
